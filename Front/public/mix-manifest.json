@@ -1,0 +1,15 @@
+{
+  "/js/app.js": "/js/app.js",
+  "/css/app.css": "/css/app.css",
+  "/css/bbinquestion.css": "/css/bbinquestion.css",
+  "/css/bbosquestion.css": "/css/bbosquestion.css",
+  "/css/language.css": "/css/language.css",
+  "/css/message.css": "/css/message.css",
+  "/css/style.css": "/css/style.css",
+  "/js/vendor.js": "/js/vendor.js",
+  "/js/message.js": "/js/message.js",
+  "/js/language.js": "/js/language.js",
+  "/js/bbosquestion.js": "/js/bbosquestion.js",
+  "/js/bbinquestion.js": "/js/bbinquestion.js",
+  "/js/manifest.js": "/js/manifest.js"
+}
