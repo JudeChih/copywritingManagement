@@ -32,8 +32,7 @@ class TransactionRecordRepository {
 			$savedata['tr_goal'] = $arraydata['tr_goal'];
             $savedata['goal_id'] = $arraydata['goal_id'];
 			$savedata['tr_user'] = \App\Services\AuthService::userData()->ud_account;
-
-			// 檢查非必傳欄位並填入
+            // 檢查非必傳欄位並填入
 
             // 填入基本欄位
 			$savedata['isflag'] = 1;
@@ -41,7 +40,6 @@ class TransactionRecordRepository {
 			$savedata['create_date'] = \Carbon\Carbon::now();
 			$savedata['last_update_user'] = \App\Services\AuthService::userData()->ud_account;
 			$savedata['last_update_date'] = \Carbon\Carbon::now();
-
             return TransactionRecord::insert($savedata);
         } catch (\Exception $e) {
             CommonTools::writeErrorLogByException($e);

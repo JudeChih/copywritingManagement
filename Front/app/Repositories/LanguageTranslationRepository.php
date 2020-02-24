@@ -36,8 +36,8 @@ class LanguageTranslationRepository {
 					  ->orWhere('cm_languagetranslation.lt_korea','like','%'.$arraydata['lt_taiwan'].'%')
 					  ->orWhere('cm_languagetranslation.lt_vietnam','like','%'.$arraydata['lt_taiwan'].'%')
 					  ->orWhere('cm_languagetranslation.lt_thailand','like','%'.$arraydata['lt_taiwan'].'%')
-					  ->orWhere('cm_languagetranslation.lt_india','like','%'.$arraydata['lt_taiwan'].'%')
-					  ->orWhere('cm_languagetranslation.lt_spain','like','%'.$arraydata['lt_taiwan'].'%')
+					//   ->orWhere('cm_languagetranslation.lt_india','like','%'.$arraydata['lt_taiwan'].'%')
+					//   ->orWhere('cm_languagetranslation.lt_spain','like','%'.$arraydata['lt_taiwan'].'%')
 					  ->orWhere('cm_language_1product.lp_name','like','%'.$arraydata['lt_taiwan'].'%')
 					  ->orWhere('cm_language_2platform.lpf_name','like','%'.$arraydata['lt_taiwan'].'%')
 					  ->orWhere('cm_language_3class.lc_name','like','%'.$arraydata['lt_taiwan'].'%')
@@ -55,20 +55,48 @@ class LanguageTranslationRepository {
 		return LanguageTranslation::where('lt_id',$lt_id)->where('isflag',1)->get();
 	}
 
+	/** 
+	 * 查詢是否有此語系
+	 */
 	public function getDataByLpId($lp_id){
 		return LanguageTranslation::where('lp_id',$lp_id)->where('isflag',1)->count();
 	}
 
+	/** 
+	 * 查詢是否有此產品
+	 */
 	public function getDataByLpfId($lpf_id){
 		return LanguageTranslation::where('lpf_id',$lpf_id)->where('isflag',1)->count();
 	}
 
+	/** 
+	 * 查詢是否有此平台
+	 */
 	public function getDataByLcId($lc_id){
 		return LanguageTranslation::where('lc_id',$lc_id)->where('isflag',1)->count();
 	}
 
+	/** 
+	 * 查詢是否有此分類
+	 */
 	public function getDataByLscId($lsc_id){
 		return LanguageTranslation::where('lsc_id',$lsc_id)->where('isflag',1)->count();
+	}
+
+	/**
+	 * 抓取是否有符合的資料
+	 * @param  [array] $arraydata [語系資料]
+	 */
+	public function getDataByRequestData($arraydata){
+		return LanguageTranslation::where('isflag',1)->where('lp_id',$arraydata['lp_id'])->where('lpf_id',$arraydata['lpf_id'])->where('lc_id',$arraydata['lc_id'])->where('lsc_id',$arraydata['lsc_id'])->where('lt_taiwan',$arraydata['lt_taiwan'])->count();
+	}
+
+	/**
+	 * 抓取是否有符合的資料
+	 * @param  [array] $arraydata [語系資料]
+	 */
+	public function getDataByTaiwanData($arraydata){
+		return LanguageTranslation::where('isflag',1)->where('lt_taiwan',$arraydata['lt_taiwan'])->count();
 	}
 
 	/**
@@ -79,7 +107,6 @@ class LanguageTranslationRepository {
 		try {
 			$savedata['last_update_user'] = \App\Services\AuthService::userData()->ud_account;
     		$savedata['isflag'] = 0;
-
     		return LanguageTranslation::where('lt_id',$lt_id)->update($savedata);
 		} catch (\Exception $e) {
 			CommonTools::writeErrorLogByException($e);
@@ -99,7 +126,6 @@ class LanguageTranslationRepository {
 			}
 			// 填入必傳欄位
 			$savedata['lp_id'] = $arraydata['lp_id'];
-
 			// 檢查非必傳欄位並填入
 			if(CommonTools::checkArrayValue($arraydata,'lpf_id')){
 				$savedata['lpf_id'] = $arraydata['lpf_id'];
@@ -140,14 +166,12 @@ class LanguageTranslationRepository {
 			if(CommonTools::checkArrayValue($arraydata,'lt_spain')){
 				$savedata['lt_spain'] = $arraydata['lt_spain'];
 			}
-
 			// 填入基本欄位
 			$savedata['isflag'] = 1;
 			$savedata['create_user'] = \App\Services\AuthService::userData()->ud_account;
 			$savedata['create_date'] = \Carbon\Carbon::now();
 			$savedata['last_update_user'] = \App\Services\AuthService::userData()->ud_account;
 			$savedata['last_update_date'] = \Carbon\Carbon::now();
-
 			// 新增語系
 			return LanguageTranslation::insertGetId($savedata);
 		} catch (\Exception $e) {
@@ -166,7 +190,6 @@ class LanguageTranslationRepository {
 			if(!CommonTools::checkArrayValue($arraydata,'lt_id')){
 				return false;
 			}
-
 			// 檢查非必傳欄位並填入
 			if(CommonTools::checkArrayValue($arraydata,'lp_id')){
 				$savedata['lp_id'] = $arraydata['lp_id'];
@@ -236,11 +259,9 @@ class LanguageTranslationRepository {
 			}else{
 				$savedata['lt_spain'] = null;
 			}
-
 			// 填入基本欄位
 			$savedata['last_update_user'] = \App\Services\AuthService::userData()->ud_account;
 			$savedata['last_update_date'] = \Carbon\Carbon::now();
-
 			// 更新語系資訊
 			return LanguageTranslation::where("lt_id","=",$arraydata['lt_id'])->update($savedata);
 		} catch (\Exception $e) {

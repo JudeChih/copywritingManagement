@@ -1,10 +1,7 @@
-<style scoped>
-
-</style>
-
+<style scoped></style>
 <template>
 	<!-- 問題列表 -->
-	<div v-if="page === 'list'" class="container-main">
+	<div class="container-main">
         <div class="container-filter">
             <!-- <h2>篩選條件</h2> -->
             <!-- 多增加了一個 v-if="list_questions.length != 0 ↓ -->
@@ -36,7 +33,7 @@
             <h1>BBIN提問</h1>
             <span class="container-tips"></span>
 		</div>
-        <div class="loading_block" v-if="loading"></div>
+        <!-- <div class="loading_block" v-if="loading"></div> -->
 		<div class="container-list question-list-wrap" v-if="loading == false">
 		    <div class="question-list">
                 <table class="question-table">
@@ -51,7 +48,6 @@
                         <tr v-for="data in checked_question">
                             <td class="qa_checkbox"><input type="checkbox" name="qa_id" :value=data.qa_id @click="selectQuestion(data.qa_id)" v-model="downloadQuestions"><span></span></td>
                             <td class="qc_name">{{data.qc_name}}<input type="hidden" name="qc_name" :value=data.qc_name></td>
-                            <!-- <td class="qa_content tip-block none" @dblclick="copyQuestion(data.qa_content,data.qa_id)">{{data.qa_content}}</td> -->
                             <td class="qa_input"><input @input="changeSelectQuestion(data.qa_id,true)" class="form-control" type="text" :value=data.qa_content></td>
                         </tr>
                     </tbody>
@@ -83,7 +79,7 @@
             <button class="btn-top" v-show="questions.length > 10" @click="goTop()"></button>
 		</div>
         <!-- 無限加載的感應區塊 -->
-        <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10"></div>
+        <div v-infinite-scroll="loadMoreTwo" infinite-scroll-disabled="bbin.busy" infinite-scroll-distance="10"></div>
         <div class="container-bottom"></div>
 	</div>
 </template>
@@ -91,32 +87,36 @@
 export default {
 	data() {
         return {
-            questions: [], //全部BBIN提問資料
-            question_field: [], //問題分類欄位
-            question: {}, //單一筆BBIN提問資料
-            search_condition: {}, //搜尋關鍵字
-            page: 'list', //當前頁面
-            check: 0, //所選qc_id
-            needReset: true, //是否需要重新載入資料
-            all: '', //總頁數
-            limit:10, //每頁顯示筆數
-        	cur: 1, //當前頁碼
-            busy: false, //無限加載的開關
-            list_questions: [], //當頁要顯示的資料
-            downloadQuestions: [], //所選的BBIN提問id陣列
-            checked_question: [],
-            down_ques: [],
-            show_clear_btn: false, //顯示清除搜尋關鍵字按鈕
-            keyword:'', //關鍵字查詢
-            loading:true, //loading的顯示與否
-            composing:true, //監聽搜尋框輸入
-            loading_finish:false,
+            bbin:{
+                busy: false, // 無限加載的開關
+            },
+                questions: [], // 全部BBIN提問資料
+                question_field: [], // 問題分類欄位
+                question: {}, // 單一筆BBIN提問資料
+                search_condition: {}, // 搜尋關鍵字
+                page: 'list', // 當前頁面
+                check: 0, // 所選qc_id
+                needReset: true, // 是否需要重新載入資料
+                all: '', // 總頁數
+                limit:10, // 每頁顯示筆數
+                cur: 1, // 當前頁碼
+                
+                list_questions: [], // 當頁要顯示的資料
+                downloadQuestions: [], // 所選的BBIN提問id陣列
+                checked_question: [],
+                down_ques: [],
+                show_clear_btn: false, // 顯示清除搜尋關鍵字按鈕
+                keyword:'', // 關鍵字查詢
+                loading:true, // loading的顯示與否
+                composing:true, // 監聽搜尋框輸入
+                loading_finish:false,
+            // }
         }
     },
     computed: {
    	},
     methods: {
-    	//跳頁到列表頁
+    	// 跳頁到列表頁
         init: function (boolean) {
             let self = this;
             self.loading = true;
@@ -136,9 +136,10 @@ export default {
                 // 取BBIN提問資料
             	axios.get('/questions/BBIN')
 	                .then(function (response) {
+                        
 	                    self.questions  = response.data;
 	                    self.all = Math.ceil(self.questions.length / self.limit);
-                        self.loadMore();
+                        self.loadMoreTwo();
                         setTimeout(function(){
                             self.loading = false;
                             self.loading_finish = true;
@@ -157,11 +158,11 @@ export default {
 	                });
 	        }
         },
-        //加載數據
-        loadMore: function(){
+        // 加載數據
+        loadMoreTwo: function(){
             let self = this;
             if(self.questions.length > 0){
-                self.busy = false;
+                self.bbin.busy = false;
                 self.cur = self.cur +1;
                 var start = (this.cur - 1) * self.limit;
                 setTimeout(() => {
@@ -169,9 +170,9 @@ export default {
                     $('.qa_input').addClass('dom_none');
                     setTimeout(() => {
                         if(self.questions.length > self.cur * self.limit){
-                            self.busy = false;
+                            self.bbin.busy = false;
                         }else{
-                            self.busy = true;
+                            self.bbin.busy = true;
                         }
                         self.list_questions = self.questions.slice(0, start+self.limit);
                         setTimeout(() => {
@@ -189,7 +190,7 @@ export default {
                 self.list_questions = [];
             }
         },
-        //複製語系
+        // 複製語系
         copyQuestion: function(content,id){
             let self = this;
             if(content){
@@ -201,7 +202,7 @@ export default {
                 })
             }
         },
-        //選擇問題
+        // 選擇問題
         selectQuestion: function (qa_id) {
             let self = this;
             if($('.qa_checkbox input[value='+qa_id+']').prop('checked')){
@@ -216,9 +217,8 @@ export default {
                 }
                 self.changeSelectQuestion(qa_id,false);
             }
-
         },
-        //下載問題
+        // 下載問題
         download: function (){
             let self = this;
             var data = [];
@@ -258,17 +258,17 @@ export default {
                 }
             }
         },
-        //監聽搜尋框 注音輸入開始
+        // 監聽搜尋框 注音輸入開始
         listen_input_start:function(){
             let self = this;
             self.composing = false;
         },
-        //監聽搜尋框 注音輸入結束
+        // 監聽搜尋框 注音輸入結束
         listen_input_end:function(){
             let self = this;
             self.composing = true;
         },
-        //查詢功能
+        // 查詢功能
         search: function (id = null) {
         	let self = this;
             setTimeout(function(){
@@ -279,7 +279,6 @@ export default {
                     if(id == 'clear'){
                         $('.search_content').find('input[name=qa_content]').val('');
                     }
-
                     if($('.search_class').find('input[name=qc_id]:checked').val() == 0){
                         self.search_condition.qc_id = '';
                         self.search_condition.qa_content = $('.search_content').find('input[name=qa_content]').val();
@@ -293,7 +292,7 @@ export default {
                                 self.questions = response.data;
                                 self.all = Math.ceil(self.questions.length / self.limit);
                                 self.needReset = false
-                                self.loadMore();
+                                self.loadMoreTwo();
                             })
                             .catch(function (response) {
                                 self.prompt(response.data.result);
@@ -317,7 +316,7 @@ export default {
                                 self.questions = response.data;
                                 self.all = Math.ceil(self.questions.length / self.limit);
                                 self.needReset = false
-                                self.loadMore();
+                                self.loadMoreTwo();
                             })
                             .catch(function (response) {
                                 self.prompt(response.data.result);
@@ -326,13 +325,12 @@ export default {
                 }
             },10)
         },
-        //修改所選的問題資料的json
+        // 修改所選的問題資料的json
         changeSelectQuestion: function (qa_id,boolean){
             let self = this;
             var data = {};
             var ques = [];
             var new_q = true;
-
             if(boolean){
                 data.qa_id = qa_id;
                 data.qa_content = $('.qa_checkbox input[value='+qa_id+']').parent('.qa_checkbox').siblings('.qa_input').find('input').val();
@@ -358,7 +356,7 @@ export default {
                 self.checked_question = ques;
             }
         },
-         //清除所選BBIN提問
+         // 清除所選BBIN提問
         clearQuestions:function(){
             let self = this;
             self.downloadQuestions = [];
@@ -366,7 +364,7 @@ export default {
             $('.qa_content').removeClass('dom_none');
             $('.qa_input').addClass('dom_none');
         },
-        //彈出提示框
+        // 彈出提示框
         prompt:function(string){
             $('html').scrollLeft(0);
             $('html').scrollTop(0);
@@ -374,7 +372,7 @@ export default {
             $('.prompt_body_admin').fadeIn(400);
             $('html').addClass('over_hidden');
         },
-        //回到最上面
+        // 回到最上面
         goTop:function(){
             $('html,body').animate({ 'scrollTop': 0 }, 250);
         }

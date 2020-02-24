@@ -14,7 +14,6 @@ class ErrorLogRepository {
      * @return type
      */
     public function create(array $arraydata) {
-
         try {
             $savedata['log_time'] = \Carbon\Carbon::now();
             if (isset($arraydata['log_code'])) {
@@ -38,7 +37,6 @@ class ErrorLogRepository {
             if (isset($arraydata['log_traceasstring'])) {
                 $savedata['log_traceasstring'] = $arraydata['log_traceasstring'];
             }
-
             ErrorLog::insert($savedata);
             return true;
         } catch (\Exception $e) {

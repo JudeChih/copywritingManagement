@@ -5,7 +5,7 @@ use Request;
 use \Illuminate\Support\Facades\View;
 use App\Http\Controllers\Controller;
 use App\Library\CommonTools;
-use Excel;
+use DB;
 
 class QuestionAskController extends Controller
 {
@@ -26,7 +26,6 @@ class QuestionAskController extends Controller
 					return CommonTools::returnData('資料獲取失敗');
 				}
 			}
-			
 			return response()->json($data);
 		} catch (\Exception $e) {
 			CommonTools::writeErrorLogByException($e);
@@ -63,7 +62,6 @@ class QuestionAskController extends Controller
     	$searchdata = Request::all();
     	$result = [];
         try {
-
 			$section = $phpWord->createSection();
 			$tableStyle = array(
 			    'borderColor' => '006699',
@@ -90,33 +88,122 @@ class QuestionAskController extends Controller
                 	$table->addCell()->addText($val['qa_content']);
 	            }
             }
-			// $section->addText(json_encode($result));
 			$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
 			$objWriter->save(storage_path('問題提問.docx'));
 			return response()->download(storage_path('問題提問.docx'));
-
-
-
-
-			// 以下是匯出Excel的作法
-        	// $result = [];
-
-         //    $data['qc_name'] = '分類';
-         //    $data['qa_content'] = '問題';
-
-         //    array_push($result,$data);
-
-         //    return Excel::create('下載問題', function($excel) use ($result) {
-         //        $excel->sheet('問題提問', function($sheet) use ($result)
-         //        {
-         //        	$sheet->freezeFirstRow();
-         //            $sheet->fromArray($result);
-         //        });
-         //    })->download('xlsx');
         } catch (Exception $e) {
             CommonTools::writeErrorLogByException($e);
 			return CommonTools::returnData('未知錯誤');
         }
 
-    }
+	}
+	
+	/**
+	 * 新增一個問題提問
+	 * @param [array] $searchdata [新增資料]
+	 */
+	public function actionQuestionCreate(){
+		$qa_r = new \App\Repositories\QuestionAskRepository;
+		$searchdata = Request::all();
+		$recorddata = array();
+		$recorddata['tr_action'] = 1; // 異動動作：新增
+		$recorddata['tr_goal'] = 1; // 異動目標：問題提問
+		try {
+			foreach ($searchdata as $data) {
+				if(CommonTools::checkArrayValue($data,'qc_id')){
+					if(!is_numeric($data['qc_id']) || $data['qc_id'] == ""){
+						return CommonTools::returnData('其中一筆資料未傳入分類編號');
+					}
+				}else{
+					return CommonTools::returnData('其中一筆資料未傳入分類編號');
+				}
+				if(CommonTools::checkArrayValue($data,'qa_content')){
+					if($data['qa_content'] == ""){
+						return CommonTools::returnData('其中一筆資料未傳入問題內容');
+					}
+				}else{
+					return CommonTools::returnData('其中一筆資料未傳入問題內容');
+				}
+			}
+			DB::beginTransaction();
+			foreach ($searchdata as $data) {
+				if(!$id = $qa_r->create($data)){
+					DB::rollBack();
+					return CommonTools::returnData('新增失敗');
+				}else{
+					$recorddata['goal_id'] = $id; // 目標編號：qa_id
+				}
+				// 新增異動紀錄
+				CommonTools::createTransactionRecord($recorddata);
+			}
+			DB::commit();
+			return CommonTools::returnData('ok');
+		} catch (\Exception $e) {
+			DB::rollBack();
+			CommonTools::writeErrorLogByException($e);
+			return CommonTools::returnData('未知錯誤');
+		}
+	}
+
+	/**
+	 * 修改某問題提問
+	 * @param [array] $searchdata [修改資料]
+	 */
+	public function actionQuestionModify(){
+		$qa_r = new \App\Repositories\QuestionAskRepository;
+		$searchdata = Request::all();
+		$recorddata = array();
+		$recorddata['tr_action'] = 2; // 異動動作：修改
+		$recorddata['tr_goal'] = 1; // 異動目標：問題提問
+		try {
+			if(!CommonTools::checkArrayValue($searchdata,'qa_id')){
+				return CommonTools::returnData('未傳入問題編號');
+			}
+			if(CommonTools::checkArrayValue($searchdata,'qc_id')){
+				if(!is_numeric($searchdata['qc_id']) || $searchdata['qc_id'] == ""){
+					$searchdata['qc_id'] = null;
+				}
+			}
+			if(CommonTools::checkArrayValue($searchdata,'qa_content')){
+				if($searchdata['qa_content'] == ""){
+					return CommonTools::returnData('問題內容不能為空');
+				}
+			}
+			if(!$qa_r->update($searchdata)){
+				return CommonTools::returnData('修改失敗');
+			}else{
+				$recorddata['goal_id'] = $searchdata['qa_id']; // 目標編號：qa_id
+			}
+			// 新增異動紀錄
+			CommonTools::createTransactionRecord($recorddata);
+			return CommonTools::returnData('ok');
+		} catch (\Exception $e) {
+			CommonTools::writeErrorLogByException($e);
+			return CommonTools::returnData('未知錯誤');
+		}
+	}
+
+	/**
+	 * 刪除某問題提問
+	 * @param  [string] $id [問題編號]
+	 */
+	public function actionQuestionDelete($id){
+		$qa_r = new \App\Repositories\QuestionAskRepository;
+		$recorddata = array();
+		$recorddata['tr_action'] = 3; // 異動動作：刪除
+		$recorddata['tr_goal'] = 1; // 異動目標：問題提問
+		try {
+			if(!$qa_r->delete($id)){
+				return CommonTools::returnData('刪除失敗');
+			}else{
+				$recorddata['goal_id'] = $id; // 目標編號：qa_id
+			}
+			// 新增異動紀錄
+			CommonTools::createTransactionRecord($recorddata);
+			return CommonTools::returnData('ok');
+		} catch (\Exception $e) {
+			CommonTools::writeErrorLogByException($e);
+			return CommonTools::returnData('未知錯誤');
+		}
+	}
 }

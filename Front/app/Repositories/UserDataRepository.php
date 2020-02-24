@@ -39,6 +39,14 @@ class UserDataRepository {
 	}
 
 	/**
+	 * 透過帳號取得是否已經被註冊過
+	 * @param  [string] $ud_account [使用者帳號]
+	 */
+	public function getDataByAccount($ud_account){
+		return WebUser::where('ud_account',$ud_account)->where('isflag',1)->count();
+	}
+
+	/**
 	 * 透過id抓取相符的使用者資料
 	 * @param  [string] $ud_id [使用者編號]
 	 */
@@ -94,7 +102,6 @@ class UserDataRepository {
 			$savedata['ud_name'] = $arraydata['ud_name'];
 			$savedata['ud_account'] = $arraydata['ud_account'];
 			$savedata['ud_password'] = $arraydata['ud_password'];
-
 			// 檢查非必傳欄位並填入
 			if(CommonTools::checkArrayValue($arraydata,'ud_status')){
 				$savedata['ud_status'] = $arraydata['ud_status'];
@@ -102,14 +109,12 @@ class UserDataRepository {
 			if(CommonTools::checkArrayValue($arraydata,'ud_admin')){
 				$savedata['ud_admin'] = $arraydata['ud_admin'];
 			}
-
             // 填入基本欄位
 			$savedata['isflag'] = 1;
 			$savedata['create_user'] = \App\Services\AuthService::userData()->ud_account;
 			$savedata['create_date'] = \Carbon\Carbon::now();
 			$savedata['last_update_user'] = \App\Services\AuthService::userData()->ud_account;
 			$savedata['last_update_date'] = \Carbon\Carbon::now();
-
 			// 新增使用者
 			return WebUser::insertGetId($savedata);
 		} catch (\Exception $e) {
@@ -147,7 +152,6 @@ class UserDataRepository {
 			if(CommonTools::checkArrayValue($arraydata,'isflag')){
 				$savedata['isflag'] = $arraydata['isflag'];
 			}
-
 			// 填入基本欄位
 			$savedata['last_update_user'] = \App\Services\AuthService::userData()->ud_account;
 			$savedata['last_update_date'] = \Carbon\Carbon::now();

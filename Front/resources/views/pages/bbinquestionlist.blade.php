@@ -17,4 +17,3 @@
     <bbinquestion></bbinquestion>
 </div>
 @endsection
-

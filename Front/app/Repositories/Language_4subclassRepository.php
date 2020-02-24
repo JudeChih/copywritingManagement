@@ -15,12 +15,37 @@ class Language_4subclassRepository {
 		return Language_4subclass::where('isflag',1)->get();
 	}
 
+	public function getDataById($lsc_id){
+		return Language_4subclass::where('lsc_id',$lsc_id)->where('isflag',1)->get();
+	}
+
+	/**
+	 * 取得所有翻譯語系的子分類的欄位資料 - 專門for批量新增功能
+	 */
+	public function getAllDataForBatch(){
+		return Language_4subclass::leftjoin('cm_language_3class','cm_language_4subclass.lc_id','cm_language_3class.lc_id')->leftjoin('cm_language_2platform','cm_language_4subclass.lpf_id','cm_language_2platform.lpf_id')->leftjoin('cm_language_1product','cm_language_4subclass.lp_id','cm_language_1product.lp_id')->where('cm_language_4subclass.isflag',1)->orderBy('cm_language_1product.lp_name','DESC')->orderBy('cm_language_2platform.lpf_name','DESC')->orderBy('cm_language_3class.lc_name','DESC')->orderBy('cm_language_4subclass.lsc_name','DESC')->get();
+	}
+
+	/** 
+	 * 藉由lsc_id查詢符合的資料
+	 */
 	public function getDataByLscId($arraydata){
 		return Language_4subclass::leftjoin('cm_language_3class','cm_language_4subclass.lc_id','cm_language_3class.lc_id')->leftjoin('cm_language_2platform','cm_language_4subclass.lpf_id','cm_language_2platform.lpf_id')->leftjoin('cm_language_1product','cm_language_4subclass.lp_id','cm_language_1product.lp_id')->where('cm_language_4subclass.lsc_id',$arraydata['lsc_id'])->where('cm_language_4subclass.isflag',1)->get();
 	}
 
+	/**
+	 * 藉由lp_id查詢符合的資料
+	 */
 	public function getDataByLpId($arraydata){
-		return Language_4subclass::leftjoin('cm_language_3class','cm_language_4subclass.lc_id','cm_language_3class.lc_id')->leftjoin('cm_language_2platform','cm_language_4subclass.lpf_id','cm_language_2platform.lpf_id')->leftjoin('cm_language_1product','cm_language_4subclass.lp_id','cm_language_1product.lp_id')->where('cm_language_4subclass.lp_id',$arraydata['lp_id'])->where('cm_language_4subclass.isflag',1)->get();
+		$string = Language_4subclass::leftjoin('cm_language_3class','cm_language_4subclass.lc_id','cm_language_3class.lc_id')->leftjoin('cm_language_2platform','cm_language_4subclass.lpf_id','cm_language_2platform.lpf_id')->leftjoin('cm_language_1product','cm_language_4subclass.lp_id','cm_language_1product.lp_id');
+		if($arraydata['lp_id'] != -1){
+			$string->where('cm_language_4subclass.lp_id',$arraydata['lp_id']);
+		}
+		if(CommonTools::checkArrayValue($arraydata,'keyword')){
+			return $string->where('cm_language_4subclass.lsc_name','like','%'.$arraydata['keyword'].'%')->where('cm_language_4subclass.isflag',1)->get();
+		}else{
+			return $string->where('cm_language_4subclass.isflag',1)->get();
+		}
 	}
 
 	/**
@@ -55,7 +80,6 @@ class Language_4subclassRepository {
 		try {
 			$savedata['last_update_user'] = \App\Services\AuthService::userData()->ud_account;
     		$savedata['isflag'] = 0;
-
     		return Language_4subclass::where('lsc_id',$lsc_id)->update($savedata);
 		} catch (\Exception $e) {
 			CommonTools::writeErrorLogByException($e);
@@ -81,14 +105,12 @@ class Language_4subclassRepository {
 			$savedata['lp_id'] = $arraydata['lp_id'];
 			$savedata['lpf_id'] = $arraydata['lpf_id'];
 			$savedata['lc_id'] = $arraydata['lc_id'];
-
 			// 填入基本欄位
 			$savedata['isflag'] = 1;
 			$savedata['create_user'] = \App\Services\AuthService::userData()->ud_account;
 			$savedata['create_date'] = \Carbon\Carbon::now();
 			$savedata['last_update_user'] = \App\Services\AuthService::userData()->ud_account;
 			$savedata['last_update_date'] = \Carbon\Carbon::now();
-
 			// 新增子分類欄位
 			return Language_4subclass::insertGetId($savedata);
 		} catch (\Exception $e) {
@@ -107,16 +129,13 @@ class Language_4subclassRepository {
 			if(!CommonTools::checkArrayValue($arraydata,'lsc_id')){
 				return false;
 			}
-
 			// 檢查非必傳欄位並填入
 			if(CommonTools::checkArrayValue($arraydata,'lsc_name')){
 				$savedata['lsc_name'] = $arraydata['lsc_name'];
 			}
-
 			// 填入基本欄位
 			$savedata['last_update_user'] = \App\Services\AuthService::userData()->ud_account;
 			$savedata['last_update_date'] = \Carbon\Carbon::now();
-
 			// 更新子分類欄位資訊
 			return Language_4subclass::where("lsc_id","=",$arraydata['lsc_id'])->update($savedata);
 		} catch (\Exception $e) {

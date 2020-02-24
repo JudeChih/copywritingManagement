@@ -1,10 +1,7 @@
-<style scoped>
-
-</style>
-
+<style scoped></style>
 <template>
 	<!-- 問題列表 -->
-	<div v-if="page === 'list'" class="container-main">
+	<div class="container-main">
         <div class="container-filter">
             <!-- <h2>篩選條件</h2> -->
             <!-- 多增加了一個 v-if="list_questions.length != 0 ↓ -->
@@ -91,32 +88,30 @@
 export default {
 	data() {
         return {
-            questions: [], //全部NBB提問資料
-            question_field: [], //問題分類欄位
-            question: {}, //單一筆NBB提問資料
-            search_condition: {}, //搜尋關鍵字
-            page: 'list', //當前頁面
-            check: 0, //所選qc_id
-            needReset: true, //是否需要重新載入資料
-            all: '', //總頁數
-            limit:10, //每頁顯示筆數
-        	cur: 1, //當前頁碼
-            busy: false, //無限加載的開關
-            list_questions: [], //當頁要顯示的資料
-            downloadQuestions: [], //所選的NBB提問id陣列
+            
+            search_condition: {}, // 搜尋關鍵字
+            page: 'list', // 當前頁面
+            check: 0, // 所選qc_id
+            needReset: true, // 是否需要重新載入資料
+            all: '', // 總頁數
+            limit:10, // 每頁顯示筆數
+        	cur: 1, // 當前頁碼
+            busy: false, // 無限加載的開關
+            list_questions: [], // 當頁要顯示的資料
+            downloadQuestions: [], // 所選的NBB提問id陣列
             checked_question: [],
             down_ques: [],
-            show_clear_btn: false, //顯示清除搜尋關鍵字按鈕
-            keyword:'', //關鍵字查詢
-            loading:true, //loading的顯示與否
-            composing:true, //監聽搜尋框輸入
+            show_clear_btn: false, // 顯示清除搜尋關鍵字按鈕
+            keyword:'', // 關鍵字查詢
+            loading:true, // loading的顯示與否
+            composing:true, // 監聽搜尋框輸入
             loading_finish:false,
         }
     },
     computed: {
    	},
     methods: {
-    	//跳頁到列表頁
+    	// 跳頁到列表頁
         init: function (boolean) {
             let self = this;
             self.loading = true;
@@ -133,7 +128,7 @@ export default {
                 self.downloadQuestions = [];
             }
             if(self.needReset){
-                // 取NBB提問資料
+                // 取BBOS提問資料
             	axios.get('/questions/BBOS')
 	                .then(function (response) {
 	                    self.questions  = response.data;
@@ -147,7 +142,7 @@ export default {
 	                .catch(function (response) {
 	                    self.prompt(response.data.result);
 	                });
-                // 取NBB提問的分類欄位資料
+                // 取BBOS提問的分類欄位資料
 	            axios.get('/field-question/BBOS')
 	                .then(function (response) {
 	                    self.question_field  = response.data;
@@ -157,9 +152,9 @@ export default {
 	                });
 	        }
         },
-        //加載數據
+        // 加載數據
         loadMore: function(){
-            let self = this;
+            let sel = this;
             if(self.questions.length > 0){
                 self.busy = false;
                 self.cur = self.cur +1;
@@ -189,7 +184,7 @@ export default {
                 self.list_questions = [];
             }
         },
-        //複製語系
+        // 複製語系
         copyQuestion: function(content,id){
             let self = this;
             if(content){
@@ -201,7 +196,7 @@ export default {
                 })
             }
         },
-        //選擇問題
+        // 選擇問題
         selectQuestion: function (qa_id) {
             let self = this;
             if($('.qa_checkbox input[value='+qa_id+']').prop('checked')){
@@ -216,9 +211,8 @@ export default {
                 }
                 self.changeSelectQuestion(qa_id,false);
             }
-
         },
-        //下載問題
+        // 下載問題
         download: function (){
             let self = this;
             var data = [];
@@ -258,17 +252,17 @@ export default {
                 }
             }
         },
-        //監聽搜尋框 注音輸入開始
+        // 監聽搜尋框 注音輸入開始
         listen_input_start:function(){
             let self = this;
             self.composing = false;
         },
-        //監聽搜尋框 注音輸入結束
+        // 監聽搜尋框 注音輸入結束
         listen_input_end:function(){
             let self = this;
             self.composing = true;
         },
-        //查詢功能
+        // 查詢功能
         search: function (id = null) {
         	let self = this;
             setTimeout(function(){
@@ -279,7 +273,6 @@ export default {
                     if(id == 'clear'){
                         $('.search_content').find('input[name=qa_content]').val('');
                     }
-
                     if($('.search_class').find('input[name=qc_id]:checked').val() == 0){
                         self.search_condition.qc_id = '';
                         self.search_condition.qa_content = $('.search_content').find('input[name=qa_content]').val();
@@ -326,13 +319,12 @@ export default {
                 }
             },10)
         },
-        //修改所選的問題資料的json
+        // 修改所選的問題資料的json
         changeSelectQuestion: function (qa_id,boolean){
             let self = this;
             var data = {};
             var ques = [];
             var new_q = true;
-
             if(boolean){
                 data.qa_id = qa_id;
                 data.qa_content = $('.qa_checkbox input[value='+qa_id+']').parent('.qa_checkbox').siblings('.qa_input').find('input').val();
@@ -358,7 +350,7 @@ export default {
                 self.checked_question = ques;
             }
         },
-         //清除所選NBB提問
+         // 清除所選NBB提問
         clearQuestions:function(){
             let self = this;
             self.downloadQuestions = [];
@@ -366,7 +358,7 @@ export default {
             $('.qa_content').removeClass('dom_none');
             $('.qa_input').addClass('dom_none');
         },
-        //彈出提示框
+        // 彈出提示框
         prompt:function(string){
             $('html').scrollLeft(0);
             $('html').scrollTop(0);
@@ -374,7 +366,7 @@ export default {
             $('.prompt_body_admin').fadeIn(400);
             $('html').addClass('over_hidden');
         },
-        //回到最上面
+        // 回到最上面
         goTop:function(){
             $('html,body').animate({ 'scrollTop': 0 }, 250);
         }

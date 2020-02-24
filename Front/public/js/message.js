@@ -143,22 +143,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            btn_create_save: false, //防呆按鈕
-            // list_messages:[], //當頁要顯示的資料
-            message: {}, //單一筆資料
-            messages: [], //所有資料
-            page: 'list', //當前頁面
-            all: '', //總頁數
-            limit: 10, //每頁顯示筆數
-            cur: 1, //當前頁碼
-            loading: true //loading的顯示與否
+            btn_create_save: false, // 防呆按鈕
+            // list_messages:[], // 當頁要顯示的資料
+            message: {}, // 單一筆資料
+            messages: [], // 所有資料
+            page: 'list', // 當前頁面
+            all: '', // 總頁數
+            limit: 10, // 每頁顯示筆數
+            cur: 1, // 當前頁碼
+            loading: true // loading的顯示與否
         };
     },
 
@@ -171,20 +168,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var left = 1;
             var right = this.all;
             var ar = [];
-            //    if(this.all>= 11){
-            //    if(this.cur > 5 && this.cur < this.all-4){
-            //           left = this.cur - 5;
-            //           right = this.cur + 4;
-            //    }else{
-            //        if(this.cur<=5){
-            //            left = 1;
-            //            right = 10;
-            //        }else{
-            //            right = this.all;
-            //            left = this.all -9;
-            //        }
-            //    }
-            // }
             while (left <= right) {
                 ar.push(left);
                 left++;
@@ -192,7 +175,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return ar;
         },
         showLast: function showLast() {
-            //顯示分頁的下一頁按鈕
+            // 顯示分頁的下一頁按鈕
             if (this.cur == this.all) {
                 return false;
             } else if (this.all == 0) {
@@ -201,7 +184,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return true;
         },
         showFirst: function showFirst() {
-            //顯示分頁的上一頁按鈕
+            // 顯示分頁的上一頁按鈕
             if (this.cur == 1) {
                 return false;
             } else if (this.all == 0) {
@@ -211,7 +194,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     methods: {
-        //跳頁到列表頁
+        // 跳頁到列表頁
         init: function init(boolean) {
             var self = this;
             self.loading = true;
@@ -231,13 +214,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 self.prompt('有Bug快解決，立刻馬上！');
             });
         },
-        //跳頁到新增頁
+        // 跳頁到新增頁
         page_create: function page_create() {
             var self = this;
             self.page = 'create';
             self.btn_create_save = false;
         },
-        //新增功能
+        // 新增功能
         create: function create() {
             var self = this;
             self.message.mb_name = $('input[name=mb_name]').val();
@@ -265,7 +248,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 });
             }
         },
-        //加載數據
+        // 加載數據
         loadMore: function loadMore() {
             var _this = this;
 
@@ -282,18 +265,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 self.list_messages = _this.messages.slice(0, start + _this.limit);
             }, 500);
         },
-        //檢查是否為近幾天比較新的留言
+        // 檢查是否為近幾天比較新的留言
         new_or_not: function new_or_not(date) {
             var date1 = new Date(date);
             var dd = new Date() - date1;
             if (dd < 7 * 24 * 60 * 60 * 1000) {
-                //要小於7天才會顯示New icon
+                // 要小於7天才會顯示New icon
                 return true;
             } else {
                 return false;
             }
         },
-        //彈出提示框
+        // 彈出提示框
         prompt: function prompt(string) {
             $('html').scrollLeft(0);
             $('html').scrollTop(0);
@@ -301,15 +284,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             $('.prompt_body_admin').fadeIn(400);
             $('html').addClass('over_hidden');
         },
-        //改變select裡的option
+        // 改變select裡的option
         change_select_option: function change_select_option(string) {
             $('.pages-wrap select option').eq(string - 1).prop('selected', true);
         },
-        //回到最上面
+        // 回到最上面
         goTop: function goTop() {
             $('html,body').animate({ 'scrollTop': 0 }, 250);
         },
-        //頁碼點擊事件
+        // 頁碼點擊事件
         pageClick: function pageClick() {
             var data;
             $('.pages-wrap select option').each(function () {
@@ -334,7 +317,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)();
-exports.push([module.i, "\n\n", ""]);
+exports.push([module.i, "", ""]);
 
 /***/ }),
 
@@ -413,7 +396,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\xampp\\htdocs\\laravel\\copywritingManagement\\Front\\resources\\assets\\js\\pages\\Message.vue"
+Component.options.__file = "C:\\Users\\Toby_huang\\projects\\copywritingManagement\\Front\\resources\\assets\\js\\pages\\Message.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Message.vue: functional components are not supported with templates, they should use render functions.")}
 

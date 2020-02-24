@@ -148,39 +148,36 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            questions: [], //全部NBB提問資料
-            question_field: [], //問題分類欄位
-            question: {}, //單一筆NBB提問資料
-            search_condition: {}, //搜尋關鍵字
-            page: 'list', //當前頁面
-            check: 0, //所選qc_id
-            needReset: true, //是否需要重新載入資料
-            all: '', //總頁數
-            limit: 10, //每頁顯示筆數
-            cur: 1, //當前頁碼
-            busy: false, //無限加載的開關
-            list_questions: [], //當頁要顯示的資料
-            downloadQuestions: [], //所選的NBB提問id陣列
+            questions: [], // 全部NBB提問資料
+            question_field: [], // 問題分類欄位
+            question: {}, // 單一筆NBB提問資料
+            search_condition: {}, // 搜尋關鍵字
+            page: 'list', // 當前頁面
+            check: 0, // 所選qc_id
+            needReset: true, // 是否需要重新載入資料
+            all: '', // 總頁數
+            limit: 10, // 每頁顯示筆數
+            cur: 1, // 當前頁碼
+            busy: false, // 無限加載的開關
+            list_questions: [], // 當頁要顯示的資料
+            downloadQuestions: [], // 所選的NBB提問id陣列
             checked_question: [],
             down_ques: [],
-            show_clear_btn: false, //顯示清除搜尋關鍵字按鈕
-            keyword: '', //關鍵字查詢
-            loading: true, //loading的顯示與否
-            composing: true, //監聽搜尋框輸入
+            show_clear_btn: false, // 顯示清除搜尋關鍵字按鈕
+            keyword: '', // 關鍵字查詢
+            loading: true, // loading的顯示與否
+            composing: true, // 監聽搜尋框輸入
             loading_finish: false
         };
     },
 
     computed: {},
     methods: {
-        //跳頁到列表頁
+        // 跳頁到列表頁
         init: function init(boolean) {
             var self = this;
             self.loading = true;
@@ -217,7 +214,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 });
             }
         },
-        //加載數據
+        // 加載數據
         loadMore: function loadMore() {
             var self = this;
             if (self.questions.length > 0) {
@@ -249,7 +246,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 self.list_questions = [];
             }
         },
-        //複製語系
+        // 複製語系
         copyQuestion: function copyQuestion(content, id) {
             var self = this;
             if (content) {
@@ -263,7 +260,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 });
             }
         },
-        //選擇問題
+        // 選擇問題
         selectQuestion: function selectQuestion(qa_id) {
             var self = this;
             if ($('.qa_checkbox input[value=' + qa_id + ']').prop('checked')) {
@@ -279,7 +276,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 self.changeSelectQuestion(qa_id, false);
             }
         },
-        //下載問題
+        // 下載問題
         download: function download() {
             var self = this;
             var data = [];
@@ -319,17 +316,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
             }
         },
-        //監聽搜尋框 注音輸入開始
+        // 監聽搜尋框 注音輸入開始
         listen_input_start: function listen_input_start() {
             var self = this;
             self.composing = false;
         },
-        //監聽搜尋框 注音輸入結束
+        // 監聽搜尋框 注音輸入結束
         listen_input_end: function listen_input_end() {
             var self = this;
             self.composing = true;
         },
-        //查詢功能
+        // 查詢功能
         search: function search() {
             var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
 
@@ -342,7 +339,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     if (id == 'clear') {
                         $('.search_content').find('input[name=qa_content]').val('');
                     }
-
                     if ($('.search_class').find('input[name=qc_id]:checked').val() == 0) {
                         self.search_condition.qc_id = '';
                         self.search_condition.qa_content = $('.search_content').find('input[name=qa_content]').val();
@@ -383,13 +379,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
             }, 10);
         },
-        //修改所選的問題資料的json
+        // 修改所選的問題資料的json
         changeSelectQuestion: function changeSelectQuestion(qa_id, boolean) {
             var self = this;
             var data = {};
             var ques = [];
             var new_q = true;
-
             if (boolean) {
                 data.qa_id = qa_id;
                 data.qa_content = $('.qa_checkbox input[value=' + qa_id + ']').parent('.qa_checkbox').siblings('.qa_input').find('input').val();
@@ -415,7 +410,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 self.checked_question = ques;
             }
         },
-        //清除所選NBB提問
+        // 清除所選NBB提問
         clearQuestions: function clearQuestions() {
             var self = this;
             self.downloadQuestions = [];
@@ -423,7 +418,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             $('.qa_content').removeClass('dom_none');
             $('.qa_input').addClass('dom_none');
         },
-        //彈出提示框
+        // 彈出提示框
         prompt: function prompt(string) {
             $('html').scrollLeft(0);
             $('html').scrollTop(0);
@@ -431,7 +426,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             $('.prompt_body_admin').fadeIn(400);
             $('html').addClass('over_hidden');
         },
-        //回到最上面
+        // 回到最上面
         goTop: function goTop() {
             $('html,body').animate({ 'scrollTop': 0 }, 250);
         }
@@ -448,7 +443,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)();
-exports.push([module.i, "\n\n", ""]);
+exports.push([module.i, "", ""]);
 
 /***/ }),
 
@@ -469,7 +464,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\xampp\\htdocs\\laravel\\copywritingManagement\\Front\\resources\\assets\\js\\pages\\BBOSQuestion.vue"
+Component.options.__file = "C:\\Users\\Toby_huang\\projects\\copywritingManagement\\Front\\resources\\assets\\js\\pages\\BBOSQuestion.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] BBOSQuestion.vue: functional components are not supported with templates, they should use render functions.")}
 

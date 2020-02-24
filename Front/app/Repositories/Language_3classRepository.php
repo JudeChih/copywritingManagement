@@ -16,18 +16,39 @@ class Language_3classRepository {
 	}
 
 	/**
+	 * 取得所有翻譯語系的分類的欄位資料 - 專門for批量新增功能
+	 */
+	public function getAllDataForBatch(){
+		return Language_3class::leftjoin('cm_language_2platform','cm_language_3class.lpf_id','cm_language_2platform.lpf_id')->leftjoin('cm_language_1product','cm_language_3class.lp_id','cm_language_1product.lp_id')->where('cm_language_3class.isflag',1)->orderBy('cm_language_1product.lp_name','DESC')->orderBy('cm_language_2platform.lpf_name','DESC')->orderBy('cm_language_3class.lc_name','DESC')->get();
+	}
+
+	/**
 	 * 抓取 $lc_id 的資料
 	 */
 	public function getDataByLcId($arraydata){
 		return Language_3class::leftjoin('cm_language_2platform','cm_language_3class.lpf_id','cm_language_2platform.lpf_id')->leftjoin('cm_language_1product','cm_language_3class.lp_id','cm_language_1product.lp_id')->where('cm_language_3class.lc_id',$arraydata['lc_id'])->where('cm_language_3class.isflag',1)->get();
 	}
 
+	/** 
+	 * 藉由lpf_id查詢符合的資料
+	 */
 	public function getDataByLpfId($lpf_id){
 		return Language_3class::where('lpf_id',$lpf_id)->where('isflag',1)->get();
 	}
 
+	/** 
+	 * 藉由lp_id查詢符合的資料
+	 */
 	public function getDataByLpId($arraydata){
-		return Language_3class::leftjoin('cm_language_2platform','cm_language_3class.lpf_id','cm_language_2platform.lpf_id')->leftjoin('cm_language_1product','cm_language_3class.lp_id','cm_language_1product.lp_id')->where('cm_language_3class.lp_id',$arraydata['lp_id'])->where('cm_language_3class.isflag',1)->get();
+		$string = Language_3class::leftjoin('cm_language_2platform','cm_language_3class.lpf_id','cm_language_2platform.lpf_id')->leftjoin('cm_language_1product','cm_language_3class.lp_id','cm_language_1product.lp_id');
+		if($arraydata['lp_id'] != -1){
+			$string->where('cm_language_3class.lp_id',$arraydata['lp_id']);
+		}
+		if(CommonTools::checkArrayValue($arraydata,'keyword')){
+			return $string->where('cm_language_3class.lc_name','like','%'.$arraydata['keyword'].'%')->where('cm_language_3class.isflag',1)->get();
+		}else{
+			return $string->where('cm_language_3class.isflag',1)->get();
+		}
 	}
 
 	/**
@@ -43,6 +64,10 @@ class Language_3classRepository {
 			$string->where('lpf_id',$arraydata['lpf_id']);
 		}
 		return $string->get();
+	}
+
+	public function getDataByLcIdForModifyPage($lc_id){
+		return Language_3class::where('lc_id',$lc_id)->where('isflag',1)->get();
 	}
 
 	/**
@@ -69,7 +94,6 @@ class Language_3classRepository {
 		try {
 			$savedata['last_update_user'] = \App\Services\AuthService::userData()->ud_account;
     		$savedata['isflag'] = 0;
-
     		return Language_3class::where('lc_id',$lc_id)->update($savedata);
 		} catch (\Exception $e) {
 			CommonTools::writeErrorLogByException($e);
@@ -93,14 +117,12 @@ class Language_3classRepository {
 			$savedata['lc_name'] = $arraydata['lc_name'];
 			$savedata['lp_id'] = $arraydata['lp_id'];
 			$savedata['lpf_id'] = $arraydata['lpf_id'];
-
 			// 填入基本欄位
 			$savedata['isflag'] = 1;
 			$savedata['create_user'] = \App\Services\AuthService::userData()->ud_account;
 			$savedata['create_date'] = \Carbon\Carbon::now();
 			$savedata['last_update_user'] = \App\Services\AuthService::userData()->ud_account;
 			$savedata['last_update_date'] = \Carbon\Carbon::now();
-
 			// 新增分類欄位
 			return Language_3class::insertGetId($savedata);
 		} catch (\Exception $e) {
@@ -119,16 +141,13 @@ class Language_3classRepository {
 			if(!CommonTools::checkArrayValue($arraydata,'lc_id')){
 				return false;
 			}
-
 			// 檢查非必傳欄位並填入
 			if(CommonTools::checkArrayValue($arraydata,'lc_name')){
 				$savedata['lc_name'] = $arraydata['lc_name'];
 			}
-
 			// 填入基本欄位
 			$savedata['last_update_user'] = \App\Services\AuthService::userData()->ud_account;
 			$savedata['last_update_date'] = \Carbon\Carbon::now();
-
 			// 更新分類欄位資訊
 			return Language_3class::where("lc_id","=",$arraydata['lc_id'])->update($savedata);
 		} catch (\Exception $e) {

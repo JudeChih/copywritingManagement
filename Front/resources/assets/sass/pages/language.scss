@@ -1,5 +1,4 @@
-.lang-filter-condition,
-.lang-filter-col {
+.lang-filter-condition,.lang-filter-col{
     margin-bottom: 20px;
     .arrow {
         position: relative;
@@ -24,12 +23,10 @@
             background-image: url('/images/arrow_icon02.png');
             background-repeat: no-repeat;
             background-position: center;
-            // transition: transform .3s ease;
         }
         &.arrow-up {}
         &.arrow-down {
             &::before {
-                // transition: transform .3s ease;
                 transform: rotate(180deg);
             }
         }

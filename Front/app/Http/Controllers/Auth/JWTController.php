@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use Firebase\JWT\JWT;
 use App\Services\AuthService;
+use App\Library\CommonTools;
+
 
 define('secret', config('global.secret'));
 define('algo', config('global.algo'));
@@ -40,7 +42,7 @@ trait JWTController {
             $jwt = JWT::encode($data, $secretKey, algo);
             return $jwt;
         } catch (\Exception $e) {
-            \App\Library\CommonTools::writeErrorLogByException($e);
+            CommonTools::writeErrorLogByException($e);
             return null;
         }
     }
@@ -59,7 +61,7 @@ trait JWTController {
             }
             return true;
         } catch (\Exception $e) {
-            \App\Library\CommonTools::writeErrorLogByException($e);
+            CommonTools::writeErrorLogByException($e);
             return false;
         }
     }
@@ -81,7 +83,7 @@ trait JWTController {
             }
             return $decodeJWT->data;
         } catch (\Exception $e) {
-            \App\Library\CommonTools::writeErrorLogByException($e);
+            CommonTools::writeErrorLogByException($e);
             return null;
         }
     }

@@ -42,7 +42,11 @@ class LoginController extends Controller
     }
 
     public function loginview(){
-        return \Illuminate\Support\Facades\View::make('login');
+        if(\App\Services\AuthService::userData()){
+            return redirect('/');
+		}else{
+			return \Illuminate\Support\Facades\View::make('login');
+		}
     }
 
     /**
@@ -55,13 +59,13 @@ class LoginController extends Controller
             //檢查帳號密碼是否有填寫
             if (!isset($request->ud_account) || !isset($request->ud_pwd)) {
                 AuthService::clearToken();
-                return redirect()->back()->withInput()->withErrors(['error' => '並未正常填寫帳號密碼！']);
+                return redirect()->back()->withInput()->withErrors(['error' => '沒有相符的帳號或密碼錯誤，請重新輸入。']);
             }
             //檢查是否有這個使用者資料
             $userdata = $this->checkUserStatus($request->ud_account,$request->ud_pwd);
             if (!isset($userdata)) {
                 AuthService::clearToken();
-                return redirect()->back()->withInput()->withErrors(['error' => '此帳號尚未註冊或已停用！']);
+                return redirect()->back()->withInput()->withErrors(['error' => '沒有相符的帳號或密碼錯誤，請重新輸入。']);
             }
 
             //建立「JWT Token」
@@ -78,7 +82,7 @@ class LoginController extends Controller
                 AuthService::clearToken();
                 return redirect()->back()->withInput()->withErrors(['error' => '更新"最後一次登入時間"失敗，請聯絡開發組Toby！']);
             }
-            return redirect('/question-list');
+            return redirect('/');
         } catch (\Exception $e) {
             \App\Library\CommonTools::writeErrorLogByException($e);
             AuthService::clearToken();
@@ -94,7 +98,7 @@ class LoginController extends Controller
     public function logOut(\Illuminate\Http\Request$request) {
         //清除「Token」
         AuthService::clearToken();
-        return redirect('/login');
+        return redirect('/');
     }
 
     /**

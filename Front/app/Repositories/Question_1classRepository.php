@@ -16,6 +16,13 @@ class Question_1classRepository {
 	}
 
 	/**
+	 * 取得所有問題提問的欄位資料 for batch用
+	 */
+	public function getAllDataForBatch(){
+		return Question_1class::where('isflag',1)->get();
+	}
+
+	/**
 	 * 取得BBIN相關的資料
 	 */
 	public function getBBINData(){
@@ -38,6 +45,13 @@ class Question_1classRepository {
 	}
 
 	/**
+	 * 抓取符合的資料
+	 */
+	public function getDataByTypeId($arraydata){
+		return Question_1class::where('qa_type',$arraydata['qa_type'])->where('qc_id',$arraydata['qc_id'])->where('isflag',1)->count();
+	}
+
+	/**
 	 * 透過分類名稱抓取符合的資料並傳出筆數
 	 * @param  [string] $qc_name [分類名稱]
 	 */
@@ -50,7 +64,15 @@ class Question_1classRepository {
 	 * @param  [array] $arraydata [分類資料]
 	 */
 	public function getCountByNameId($arraydata){
-		return Question_1class::where('qc_name',$arraydata['qc_name'])->where('qc_id','!=',$arraydata['qc_id'])->where('isflag',1)->count();
+		return Question_1class::where('qc_name',$arraydata['qc_name'])->where('qc_id','!=',$arraydata['qc_id'])->where('qa_type',$arraydata['qa_type'])->where('isflag',1)->count();
+	}
+
+	/**
+	 * 透過分類名稱及分類抓取符合的資料並傳出筆數
+	 * @param  [string] $qc_name [分類名稱]
+	 */
+	public function getCountByTypeName($arraydata){
+		return Question_1class::where('qa_type',$arraydata['qa_type'])->where('qc_name',$arraydata['qc_name'])->where('isflag',1)->count();
 	}
 
 	/**
@@ -61,7 +83,6 @@ class Question_1classRepository {
 		try {
 			$savedata['last_update_user'] = \App\Services\AuthService::userData()->ud_account;
     		$savedata['isflag'] = 0;
-
     		return Question_1class::where('qc_id',$qc_id)->update($savedata);
 		} catch (\Exception $e) {
 			CommonTools::writeErrorLogByException($e);
@@ -79,17 +100,15 @@ class Question_1classRepository {
 			if(!CommonTools::checkArrayValue($arraydata,'qc_name')){
 				return false;
 			}
-
 			// 填入必傳欄位
 			$savedata['qc_name'] = $arraydata['qc_name'];
-
+			$savedata['qa_type'] = $arraydata['qa_type'];
 			// 填入基本欄位
 			$savedata['isflag'] = 1;
 			$savedata['create_user'] = \App\Services\AuthService::userData()->ud_account;
 			$savedata['create_date'] = \Carbon\Carbon::now();
 			$savedata['last_update_user'] = \App\Services\AuthService::userData()->ud_account;
 			$savedata['last_update_date'] = \Carbon\Carbon::now();
-
 			// 新增分類欄位
 			return Question_1class::insertGetId($savedata);
 		} catch (\Exception $e) {
@@ -109,16 +128,16 @@ class Question_1classRepository {
 			   !CommonTools::checkArrayValue($arraydata,'qc_id')){
 				return false;
 			}
-
 			// 檢查非必傳欄位並填入
 			if(CommonTools::checkArrayValue($arraydata,'qc_name')){
 				$savedata['qc_name'] = $arraydata['qc_name'];
 			}
-
+			if(CommonTools::checkArrayValue($arraydata,'qa_type')){
+				$savedata['qa_type'] = $arraydata['qa_type'];
+			}
 			// 填入基本欄位
 			$savedata['last_update_user'] = \App\Services\AuthService::userData()->ud_account;
 			$savedata['last_update_date'] = \Carbon\Carbon::now();
-
 			// 更新分類欄位資訊
 			return Question_1class::where("qc_id","=",$arraydata['qc_id'])->update($savedata);
 		} catch (\Exception $e) {

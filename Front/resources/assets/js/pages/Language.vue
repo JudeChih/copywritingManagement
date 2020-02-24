@@ -1,10 +1,7 @@
-<style scoped>
-
-</style>
-
+<style scoped></style>
 <template>
 	<!-- 語系列表 -->
-	<div v-if="page === 'list'" class="container-main lang-style">
+	<divclass="container-main lang-style">
         <div class="container-filter">
             <div class="lang-filter-condition">
                 <span v-if="open_advanced_search" class="arrow arrow-down" aria-hidden="true" @click="open_advanced_search=false"></span>
@@ -165,18 +162,17 @@
 	</div>
 </template>
 <script>
-
 export default {
 	data() {
         return {
-            languages: [], //全部資料
-            language: {}, //單一筆資料
-            search_condition: {}, //查詢關鍵字
-            field_lp: [], //產品欄位
-            field_lpf: [], //平台欄位
-            field_lc: [], //分類欄位
-            field_lsc: [], //子分類欄位
-            field_ls: [ //language_system
+            languages: [], // 全部資料
+            language: {}, // 單一筆資料
+            search_condition: {}, // 查詢關鍵字
+            field_lp: [], // 產品欄位
+            field_lpf: [], // 平台欄位
+            field_lc: [], // 分類欄位
+            field_lsc: [], // 子分類欄位
+            field_ls: [ // language_system
                 {ls_id : 1,ls_name : '繁'},
                 {ls_id : 2,ls_name : '簡'},
                 {ls_id : 3,ls_name : '英'},
@@ -187,7 +183,7 @@ export default {
                 {ls_id : 8,ls_name : '印'},
                 {ls_id : 9,ls_name : '西'}
             ],
-            field_vf: [ //view_field
+            field_vf: [ // view_field
                 {vf_id : 1,vf_name : '繁'},
                 {vf_id : 2,vf_name : '簡'},
                 {vf_id : 3,vf_name : '英'},
@@ -203,7 +199,7 @@ export default {
                 {vf_id : 13,vf_name : '子分類'},
                 {vf_id : 14,vf_name : '遊戲編號'}
             ],
-            field_display: { //欄位顯示狀態
+            field_display: { // 欄位顯示狀態
                 product: true,
                 platform: true,
                 class: true,
@@ -219,26 +215,26 @@ export default {
                 india: true,
                 spain: true
             },
-            page: 'list', //當前頁面
+            page: 'list', // 當前頁面
             // page_list_class: {
             //     lp_id: 1
             // },
             start_use_view_field:false, // 篩選條件顯示
-            open_view_field:false, //打開顯示欄位區塊
-            open_advanced_search : true, //打開進階查詢(篩選條件)區塊
+            open_view_field:false, // 打開顯示欄位區塊
+            open_advanced_search : true, // 打開進階查詢(篩選條件)區塊
             language_system_check: [1,2,3,4,5,6,7,8,9,10,11,12,13,14],
             hadSlice:false,
-            product_check: -1, //選擇產品
-            platform_check: false, //選擇平台
-            class_check: false, //選擇分類
-            subclass_check: false, //選擇子分類
-            needReset: true, //是否需要重新載入資料
-            all: '', //總頁數
-            limit:15, //每頁顯示筆數
-        	cur: 1, //當前頁碼
-            keyword:'', //關鍵字查詢
-            loading:true, //loading的顯示與否
-            composing:true, //監聽搜尋框輸入
+            product_check: -1, // 選擇產品
+            platform_check: false, // 選擇平台
+            class_check: false, // 選擇分類
+            subclass_check: false, // 選擇子分類
+            needReset: true, // 是否需要重新載入資料
+            all: '', // 總頁數
+            limit:15, // 每頁顯示筆數
+        	cur: 1, // 當前頁碼
+            keyword:'', // 關鍵字查詢
+            loading:true, // loading的顯示與否
+            composing:true, // 監聽搜尋框輸入
         }
     },
     computed: {
@@ -256,7 +252,7 @@ export default {
         	}
         	return ar;
        	},
-       	showLast: function(){ //顯示分頁的下一頁按鈕
+       	showLast: function(){ // 顯示分頁的下一頁按鈕
             if(this.cur == this.all){
                 return false;
             }else if(this.all == 0){
@@ -264,7 +260,7 @@ export default {
             }
             return true;
        	},
-       	showFirst: function(){ //顯示分頁的上一頁按鈕
+       	showFirst: function(){ // 顯示分頁的上一頁按鈕
             if(this.cur == 1){
                 return false;
             }else if(this.all == 0){
@@ -274,7 +270,7 @@ export default {
        	}
    	},
     methods: {
-    	//跳頁到列表頁
+    	// 跳頁到列表頁
         init: function (boolean) {
             let self = this;
             self.loading = true;
@@ -322,7 +318,7 @@ export default {
 	                });
 	        }
         },
-        //複製語系
+        // 複製語系
         copyLanguage: function(content,id,lang){
             if(content){
                 this.$copyText(content).then(function (e) {
@@ -333,68 +329,17 @@ export default {
                 })
             }
         },
-        //切換顯示產品資料
-        // change_tab: function(tab){
-        //     let self = this;
-        //     if(tab == 6){ // 廣告文宣不顯示遊戲編號的欄位
-        //         var array = self.language_system_check;
-        //         var index = array.indexOf(14);
-        //         if (index > -1) {
-        //             array.splice(index, 1);
-        //             self.field_display.number = false;
-        //             self.hadSlice = true;
-        //             self.language_system_check = array;
-        //         }
-        //     }else{
-        //         if(self.hadSlice){
-        //             self.language_system_check.push('14');
-        //             self.field_display.number = true;
-        //             self.hadSlice = false;
-        //         }
-        //     }
-        //     if(self.page_list_class.lp_id != tab){
-        //         self.page_list_class.lp_id = tab;
-        //         self.cur = 1;
-        //         axios.post('/languages',self.page_list_class)
-        //             .then(function (response) {
-        //                 self.languages  = response.data;
-        //                 self.all = Math.ceil(self.languages.length / self.limit);
-        //             })
-        //             .catch(function (response) {
-        //                 self.prompt('有Bug快解決，立刻馬上！');
-        //             });
-        //     }
-        // },
-        //監聽搜尋框 注音輸入開始
+        // 監聽搜尋框 注音輸入開始
         listen_input_start:function(){
             let self = this;
             self.composing = false;
         },
-        //監聽搜尋框 注音輸入結束
+        // 監聽搜尋框 注音輸入結束
         listen_input_end:function(){
             let self = this;
             self.composing = true;
         },
-        // //清除查詢資料
-        // clear: function(){
-        //     let self = this;
-        //     self.needReset = true;
-        //     self.search_condition = {};
-        //     self.cur = 1;
-        //     self.open_advanced_search = true;
-        //     self.product_check = -1;
-        //     self.platform_check = false;
-        //     self.class_check = false;
-        //     self.subclass_check = false;
-        //     self.languages = [];
-        //     self.field_lp = [];
-        //     self.field_lpf = [];
-        //     self.field_lc = [];
-        //     self.field_lsc = [];
-        //     self.language = {};
-        //     this.init(true);
-        // },
-        //查詢功能
+        // 查詢功能
         search: function () {
         	let self = this;
             setTimeout(function(){
@@ -414,7 +359,6 @@ export default {
                     if($('input[name=lsc_id]:checked').val()){
                         self.search_condition.lsc_id = $('input[name=lsc_id]:checked').val();
                     }
-
                     if(self.search_condition.lt_taiwan.replace(/\s+/g,"") != '' || self.search_condition.lp_id !=''){
                         axios.post('/languages', self.search_condition)
                             .then(function (response) {
@@ -431,7 +375,7 @@ export default {
                 }
             },10)
         },
-        //點擊產品欄位
+        // 點擊產品欄位
         clickProductRadio: function(){
             let self = this;
             self.search_condition.lpf_id = '';
@@ -442,7 +386,6 @@ export default {
                 self.class_check = false;
                 self.subclass_check = false;
             }else if(!$('input[name=lp_id]:checked').val()){
-                // console.log('product_if');
                 axios.get('/field-language-platform/1')
                     .then(function (response) {
                         self.field_lpf = response.data;
@@ -470,7 +413,6 @@ export default {
                         self.prompt('有Bug快解決，立刻馬上！');
                     });
             }else{
-                // console.log('product_else_if');
                 self.search_condition.lpf_id = '';
                 self.search_condition.lc_id = '';
                 self.search_condition.lsc_id = '';
@@ -519,13 +461,12 @@ export default {
                     });
             }
         },
-        //點擊平台欄位
+        // 點擊平台欄位
         clickPlatformRadio:function(){
             let self = this;
             self.search_condition.lc_id = '';
             self.search_condition.lsc_id = '';
             if($('input[name=lpf_id]:checked').val()){
-                // console.log('platform_if');
                 var lpf_id = $('input[name=lpf_id]:checked').val();
                 axios.get('/field-language-class/' + lpf_id)
                     .then(function(response){
@@ -543,12 +484,11 @@ export default {
                     });
             }
         },
-        //點擊分類欄位
+        // 點擊分類欄位
         clickClassRadio:function(){
             let self = this;
             self.search_condition.lsc_id = '';
             if($('input[name=lc_id]:checked').val()){
-                // console.log('class_if');
                 var lc_id = $('input[name=lc_id]:checked').val();
                 axios.get('/field-language-subclass/' + lc_id)
                     .then(function(response){
@@ -563,9 +503,8 @@ export default {
                         self.prompt('有Bug快解決，立刻馬上！');
                     });
             }
-
         },
-        //顯示所有欄位
+        // 顯示所有欄位
         changeViewField: function(){
             let self = this;
             var boolean = true;
@@ -583,7 +522,6 @@ export default {
             self.field_display.class = false;
             self.field_display.subclass = false;
             self.field_display.number =false;
-
             $('.view_field').find('input:checked').each(function(){
                 if($(this).prop('value') == 1){
                     self.field_display.taiwan = true;
@@ -646,7 +584,7 @@ export default {
                 self.field_display.number =true;
             }
         },
-        //顯示語系欄位
+        // 顯示語系欄位
         changeLanguageSystem: function(){
             let self = this;
             var boolean = true;
@@ -659,7 +597,6 @@ export default {
             self.field_display.thailand = false;
             self.field_display.india = false;
             self.field_display.spain = false;
-
             $('.search_language').find('input:checked').each(function(){
                 if($(this).prop('value') == 1){
                     self.field_display.taiwan = true;
@@ -716,7 +653,7 @@ export default {
                 self.start_use_view_field = true;
             }
         },
-        //彈出提示框
+        // 彈出提示框
         prompt:function(string){
             $('html').scrollLeft(0);
             $('html').scrollTop(0);
@@ -724,15 +661,15 @@ export default {
     		$('.prompt_body_admin').fadeIn(400);
     		$('html').addClass('over_hidden');
         },
-        //改變select裡的option
+        // 改變select裡的option
         change_select_option:function(string){
             $('.pages-wrap select option').eq(string - 1).prop('selected',true);
         },
-        //回到最上面
+        // 回到最上面
         goTop:function(){
             $('html,body').animate({ 'scrollTop': 0 }, 250);
         },
-        //頁碼點擊事件
+        // 頁碼點擊事件
         pageClick: function(){
             var data;
             $('.pages-wrap select option').each(function(){
@@ -743,7 +680,6 @@ export default {
             if(data != this.cur){
                 this.cur = data;
             }
-
         }
     },
     watch: {

@@ -179,7 +179,7 @@ class CommonTools {
                 $arraydata['log_line'] = $line;
             }
 
-            $errRepo = new \App\Repositories\ErrorLogRepository();
+            $errRepo = new \App\Repositories\ErrorLogRepository;
             return $errRepo->create($arraydata);
         } catch (\Exception $e) {
             CommonTools::writeErrorLogByException($e);

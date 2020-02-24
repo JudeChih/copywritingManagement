@@ -6,7 +6,6 @@ use Request;
 
 class AuthService {
 
-
     private static $sessionToken = 'jwttoken';
     private static $sessionUserData = 'userdata';
     private static $sessionUserName = 'user_name';
@@ -30,7 +29,6 @@ class AuthService {
         Session::put(AuthService::$sessionUserAdmin, $userdata['ud_admin']);
         Session::put(AuthService::$sessionUserId, $userdata['ud_id']);
         Session::put(AuthService::$sessionUserAccount, $userdata['ud_account']);
-
     }
 
     /**
@@ -42,7 +40,6 @@ class AuthService {
 
     /**
      * 取得「JWT Token」
-     * @return type
      */
     public static function token() {
         return Session::get(AuthService::$sessionToken);
@@ -50,7 +47,6 @@ class AuthService {
 
     /**
      * 使用者資料
-     * @return type
      */
     public static function userData() {
         return Session::get(AuthService::$sessionUserData);
@@ -58,7 +54,6 @@ class AuthService {
 
     /**
      * 使用者帳號
-     * @return type
      */
     public static function userAccount() {
         return Session::get(AuthService::$sessionUserAccount);
@@ -66,7 +61,6 @@ class AuthService {
 
     /**
      * 使用者名稱
-     * @return type
      */
     public static function userName() {
         return Session::get(AuthService::$sessionUserName);
@@ -74,7 +68,6 @@ class AuthService {
 
     /**
      * 使用者權限
-     * @return type
      */
     public static function userAdmin() {
         return Session::get(AuthService::$sessionUserAdmin);
@@ -82,7 +75,6 @@ class AuthService {
 
     /**
      * 使用者編號
-     * @return type
      */
     public static function userId() {
         return Session::get(AuthService::$sessionUserId);

@@ -27,18 +27,24 @@ class MessageBoardController extends Controller
 	}
 
 	/**
-	 * 新增留言
-	 * @param [array] $searchdata [留言資料]
+	 * 解決某留言板
+	 * @param  [string] $id [留言版編號]
 	 */
-	public function actionMessageCreate(){
+	public function actionMessageSolve($id){
 		$mb_r = new \App\Repositories\MessageBoardRepository;
-		$searchdata = Request::all();
+		$recorddata = array();
+		$recorddata['tr_action'] = 4; //異動動作：解決
+		$recorddata['tr_goal'] = 9; //異動目標：留言板
 		try {
-			$searchdata['mb_ip'] = Request::getClientIp();
-
-			if(!$mb_r->create($searchdata)){
-				return CommonTools::returnData('新增失敗');
+			$arraydata['mb_id'] = $id;
+			if(!$mb_r->update($arraydata)){
+				return CommonTools::returnData('解決失敗');
+			}else{
+				$recorddata['goal_id'] = $id; //目標編號：mb_id
 			}
+
+			// 新增異動紀錄
+			CommonTools::createTransactionRecord($recorddata);
 
 			return CommonTools::returnData('ok');
 		} catch (\Exception $e) {

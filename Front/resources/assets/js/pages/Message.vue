@@ -1,7 +1,4 @@
-<style scoped>
-
-</style>
-
+<style scoped></style>
 <template>
 	<!-- 留言板列表 -->
 	<div v-if="page === 'list'" class="container-main">
@@ -86,15 +83,15 @@
 export default {
 	data() {
         return {
-            btn_create_save:false, //防呆按鈕
-            // list_messages:[], //當頁要顯示的資料
-            message:{}, //單一筆資料
-            messages: [], //所有資料
-            page: 'list', //當前頁面
-            all: '', //總頁數
-            limit:10, //每頁顯示筆數
-        	cur: 1, //當前頁碼
-            loading:true, //loading的顯示與否
+            btn_create_save:false, // 防呆按鈕
+            // list_messages:[], // 當頁要顯示的資料
+            message:{}, // 單一筆資料
+            messages: [], // 所有資料
+            page: 'list', // 當前頁面
+            all: '', // 總頁數
+            limit:10, // 每頁顯示筆數
+        	cur: 1, // 當前頁碼
+            loading:true, // loading的顯示與否
         }
     },
     computed: {
@@ -106,27 +103,13 @@ export default {
             var left = 1;
             var right = this.all;
             var ar = [];
-          //    if(this.all>= 11){
-          //    if(this.cur > 5 && this.cur < this.all-4){
-          //           left = this.cur - 5;
-          //           right = this.cur + 4;
-          //    }else{
-          //        if(this.cur<=5){
-             //            left = 1;
-             //            right = 10;
-             //        }else{
-             //            right = this.all;
-             //            left = this.all -9;
-             //        }
-          //    }
-            // }
             while (left <= right){
                 ar.push(left);
                 left ++;
             }
             return ar;
         },
-        showLast: function(){ //顯示分頁的下一頁按鈕
+        showLast: function(){ // 顯示分頁的下一頁按鈕
             if(this.cur == this.all){
                 return false;
             }else if(this.all == 0){
@@ -134,7 +117,7 @@ export default {
             }
             return true;
         },
-        showFirst: function(){ //顯示分頁的上一頁按鈕
+        showFirst: function(){ // 顯示分頁的上一頁按鈕
             if(this.cur == 1){
                 return false;
             }else if(this.all == 0){
@@ -144,7 +127,7 @@ export default {
         }
    	},
     methods: {
-    	//跳頁到列表頁
+    	// 跳頁到列表頁
         init: function (boolean) {
             let self = this;
             self.loading = true;
@@ -166,13 +149,13 @@ export default {
                     self.prompt('有Bug快解決，立刻馬上！');
                 });
         },
-        //跳頁到新增頁
+        // 跳頁到新增頁
         page_create: function() {
             let self = this;
             self.page = 'create';
             self.btn_create_save = false;
         },
-        //新增功能
+        // 新增功能
         create: function () {
             let self = this;
                 self.message.mb_name = $('input[name=mb_name]').val();
@@ -202,7 +185,7 @@ export default {
                     });
             }
         },
-        //加載數據
+        // 加載數據
         loadMore: function(){
             let self = this;
             self.busy = true;
@@ -217,33 +200,33 @@ export default {
                 self.list_messages = this.messages.slice(0, start+this.limit);
             }, 500);
         },
-        //檢查是否為近幾天比較新的留言
+        // 檢查是否為近幾天比較新的留言
         new_or_not: function(date){
             var date1 = new Date(date);
             var dd = new Date() - date1;
-            if(dd < 7*24*60*60*1000){ //要小於7天才會顯示New icon
+            if(dd < 7*24*60*60*1000){ // 要小於7天才會顯示New icon
                 return true;
             }else{
                 return false;
             }
         },
-        //彈出提示框
+        // 彈出提示框
         prompt:function(string){
             $('html').scrollLeft(0);
             $('html').scrollTop(0);
         	$('.prompt_body_admin h2').text(string);
     		$('.prompt_body_admin').fadeIn(400);
-    		$('html').addClass('over_hidden');
+            $('html').addClass('over_hidden');
         },
-        //改變select裡的option
+        // 改變select裡的option
         change_select_option:function(string){
             $('.pages-wrap select option').eq(string - 1).prop('selected',true);
         },
-        //回到最上面
+        // 回到最上面
         goTop:function(){
             $('html,body').animate({ 'scrollTop': 0 }, 250);
         },
-        //頁碼點擊事件
+        // 頁碼點擊事件
         pageClick: function(){
             var data;
             $('.pages-wrap select option').each(function(){
@@ -254,11 +237,9 @@ export default {
             if(data != this.cur){
                 this.cur = data;
             }
-
         }
     },
     watch: {
-
 	},
     mounted: function () {
         this.init();

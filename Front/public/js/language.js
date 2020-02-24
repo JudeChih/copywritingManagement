@@ -225,27 +225,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            languages: [], //全部資料
-            language: {}, //單一筆資料
-            search_condition: {}, //查詢關鍵字
-            field_lp: [], //產品欄位
-            field_lpf: [], //平台欄位
-            field_lc: [], //分類欄位
-            field_lsc: [], //子分類欄位
-            field_ls: [//language_system
+            languages: [], // 全部資料
+            language: {}, // 單一筆資料
+            search_condition: {}, // 查詢關鍵字
+            field_lp: [], // 產品欄位
+            field_lpf: [], // 平台欄位
+            field_lc: [], // 分類欄位
+            field_lsc: [], // 子分類欄位
+            field_ls: [// language_system
             { ls_id: 1, ls_name: '繁' }, { ls_id: 2, ls_name: '簡' }, { ls_id: 3, ls_name: '英' }, { ls_id: 4, ls_name: '日' }, { ls_id: 5, ls_name: '韓' }, { ls_id: 6, ls_name: '越' }, { ls_id: 7, ls_name: '泰' }, { ls_id: 8, ls_name: '印' }, { ls_id: 9, ls_name: '西' }],
-            field_vf: [//view_field
+            field_vf: [// view_field
             { vf_id: 1, vf_name: '繁' }, { vf_id: 2, vf_name: '簡' }, { vf_id: 3, vf_name: '英' }, { vf_id: 4, vf_name: '日' }, { vf_id: 5, vf_name: '韓' }, { vf_id: 6, vf_name: '越' }, { vf_id: 7, vf_name: '泰' }, { vf_id: 8, vf_name: '印' }, { vf_id: 9, vf_name: '西' }, { vf_id: 10, vf_name: '產品' }, { vf_id: 11, vf_name: '平台' }, { vf_id: 12, vf_name: '分類' }, { vf_id: 13, vf_name: '子分類' }, { vf_id: 14, vf_name: '遊戲編號' }],
-            field_display: { //欄位顯示狀態
+            field_display: { // 欄位顯示狀態
                 product: true,
                 platform: true,
                 class: true,
@@ -261,26 +256,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 india: true,
                 spain: true
             },
-            page: 'list', //當前頁面
+            page: 'list', // 當前頁面
             // page_list_class: {
             //     lp_id: 1
             // },
             start_use_view_field: false, // 篩選條件顯示
-            open_view_field: false, //打開顯示欄位區塊
-            open_advanced_search: true, //打開進階查詢(篩選條件)區塊
+            open_view_field: false, // 打開顯示欄位區塊
+            open_advanced_search: true, // 打開進階查詢(篩選條件)區塊
             language_system_check: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
             hadSlice: false,
-            product_check: -1, //選擇產品
-            platform_check: false, //選擇平台
-            class_check: false, //選擇分類
-            subclass_check: false, //選擇子分類
-            needReset: true, //是否需要重新載入資料
-            all: '', //總頁數
-            limit: 15, //每頁顯示筆數
-            cur: 1, //當前頁碼
-            keyword: '', //關鍵字查詢
-            loading: true, //loading的顯示與否
-            composing: true //監聽搜尋框輸入
+            product_check: -1, // 選擇產品
+            platform_check: false, // 選擇平台
+            class_check: false, // 選擇分類
+            subclass_check: false, // 選擇子分類
+            needReset: true, // 是否需要重新載入資料
+            all: '', // 總頁數
+            limit: 15, // 每頁顯示筆數
+            cur: 1, // 當前頁碼
+            keyword: '', // 關鍵字查詢
+            loading: true, // loading的顯示與否
+            composing: true // 監聽搜尋框輸入
         };
     },
 
@@ -300,7 +295,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return ar;
         },
         showLast: function showLast() {
-            //顯示分頁的下一頁按鈕
+            // 顯示分頁的下一頁按鈕
             if (this.cur == this.all) {
                 return false;
             } else if (this.all == 0) {
@@ -309,7 +304,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return true;
         },
         showFirst: function showFirst() {
-            //顯示分頁的上一頁按鈕
+            // 顯示分頁的上一頁按鈕
             if (this.cur == 1) {
                 return false;
             } else if (this.all == 0) {
@@ -319,7 +314,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     methods: {
-        //跳頁到列表頁
+        // 跳頁到列表頁
         init: function init(boolean) {
             var self = this;
             self.loading = true;
@@ -363,7 +358,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 });
             }
         },
-        //複製語系
+        // 複製語系
         copyLanguage: function copyLanguage(content, id, lang) {
             if (content) {
                 this.$copyText(content).then(function (e) {
@@ -376,68 +371,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 });
             }
         },
-        //切換顯示產品資料
-        // change_tab: function(tab){
-        //     let self = this;
-        //     if(tab == 6){ // 廣告文宣不顯示遊戲編號的欄位
-        //         var array = self.language_system_check;
-        //         var index = array.indexOf(14);
-        //         if (index > -1) {
-        //             array.splice(index, 1);
-        //             self.field_display.number = false;
-        //             self.hadSlice = true;
-        //             self.language_system_check = array;
-        //         }
-        //     }else{
-        //         if(self.hadSlice){
-        //             self.language_system_check.push('14');
-        //             self.field_display.number = true;
-        //             self.hadSlice = false;
-        //         }
-        //     }
-        //     if(self.page_list_class.lp_id != tab){
-        //         self.page_list_class.lp_id = tab;
-        //         self.cur = 1;
-        //         axios.post('/languages',self.page_list_class)
-        //             .then(function (response) {
-        //                 self.languages  = response.data;
-        //                 self.all = Math.ceil(self.languages.length / self.limit);
-        //             })
-        //             .catch(function (response) {
-        //                 self.prompt('有Bug快解決，立刻馬上！');
-        //             });
-        //     }
-        // },
-        //監聽搜尋框 注音輸入開始
+        // 監聽搜尋框 注音輸入開始
         listen_input_start: function listen_input_start() {
             var self = this;
             self.composing = false;
         },
-        //監聽搜尋框 注音輸入結束
+        // 監聽搜尋框 注音輸入結束
         listen_input_end: function listen_input_end() {
             var self = this;
             self.composing = true;
         },
-        // //清除查詢資料
-        // clear: function(){
-        //     let self = this;
-        //     self.needReset = true;
-        //     self.search_condition = {};
-        //     self.cur = 1;
-        //     self.open_advanced_search = true;
-        //     self.product_check = -1;
-        //     self.platform_check = false;
-        //     self.class_check = false;
-        //     self.subclass_check = false;
-        //     self.languages = [];
-        //     self.field_lp = [];
-        //     self.field_lpf = [];
-        //     self.field_lc = [];
-        //     self.field_lsc = [];
-        //     self.language = {};
-        //     this.init(true);
-        // },
-        //查詢功能
+        // 查詢功能
         search: function search() {
             var self = this;
             setTimeout(function () {
@@ -457,7 +401,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     if ($('input[name=lsc_id]:checked').val()) {
                         self.search_condition.lsc_id = $('input[name=lsc_id]:checked').val();
                     }
-
                     if (self.search_condition.lt_taiwan.replace(/\s+/g, "") != '' || self.search_condition.lp_id != '') {
                         axios.post('/languages', self.search_condition).then(function (response) {
                             self.languages = response.data;
@@ -472,7 +415,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
             }, 10);
         },
-        //點擊產品欄位
+        // 點擊產品欄位
         clickProductRadio: function clickProductRadio() {
             var self = this;
             self.search_condition.lpf_id = '';
@@ -483,7 +426,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 self.class_check = false;
                 self.subclass_check = false;
             } else if (!$('input[name=lp_id]:checked').val()) {
-                // console.log('product_if');
                 axios.get('/field-language-platform/1').then(function (response) {
                     self.field_lpf = response.data;
                     if (self.field_lpf.length > 0) {
@@ -507,7 +449,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     self.prompt('有Bug快解決，立刻馬上！');
                 });
             } else {
-                // console.log('product_else_if');
                 self.search_condition.lpf_id = '';
                 self.search_condition.lc_id = '';
                 self.search_condition.lsc_id = '';
@@ -550,13 +491,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 });
             }
         },
-        //點擊平台欄位
+        // 點擊平台欄位
         clickPlatformRadio: function clickPlatformRadio() {
             var self = this;
             self.search_condition.lc_id = '';
             self.search_condition.lsc_id = '';
             if ($('input[name=lpf_id]:checked').val()) {
-                // console.log('platform_if');
                 var lpf_id = $('input[name=lpf_id]:checked').val();
                 axios.get('/field-language-class/' + lpf_id).then(function (response) {
                     self.field_lc = response.data;
@@ -572,12 +512,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 });
             }
         },
-        //點擊分類欄位
+        // 點擊分類欄位
         clickClassRadio: function clickClassRadio() {
             var self = this;
             self.search_condition.lsc_id = '';
             if ($('input[name=lc_id]:checked').val()) {
-                // console.log('class_if');
                 var lc_id = $('input[name=lc_id]:checked').val();
                 axios.get('/field-language-subclass/' + lc_id).then(function (response) {
                     self.field_lsc = response.data;
@@ -591,7 +530,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 });
             }
         },
-        //顯示所有欄位
+        // 顯示所有欄位
         changeViewField: function changeViewField() {
             var self = this;
             var boolean = true;
@@ -609,7 +548,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             self.field_display.class = false;
             self.field_display.subclass = false;
             self.field_display.number = false;
-
             $('.view_field').find('input:checked').each(function () {
                 if ($(this).prop('value') == 1) {
                     self.field_display.taiwan = true;
@@ -672,7 +610,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 self.field_display.number = true;
             }
         },
-        //顯示語系欄位
+        // 顯示語系欄位
         changeLanguageSystem: function changeLanguageSystem() {
             var self = this;
             var boolean = true;
@@ -685,7 +623,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             self.field_display.thailand = false;
             self.field_display.india = false;
             self.field_display.spain = false;
-
             $('.search_language').find('input:checked').each(function () {
                 if ($(this).prop('value') == 1) {
                     self.field_display.taiwan = true;
@@ -742,7 +679,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 self.start_use_view_field = true;
             }
         },
-        //彈出提示框
+        // 彈出提示框
         prompt: function prompt(string) {
             $('html').scrollLeft(0);
             $('html').scrollTop(0);
@@ -750,15 +687,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             $('.prompt_body_admin').fadeIn(400);
             $('html').addClass('over_hidden');
         },
-        //改變select裡的option
+        // 改變select裡的option
         change_select_option: function change_select_option(string) {
             $('.pages-wrap select option').eq(string - 1).prop('selected', true);
         },
-        //回到最上面
+        // 回到最上面
         goTop: function goTop() {
             $('html,body').animate({ 'scrollTop': 0 }, 250);
         },
-        //頁碼點擊事件
+        // 頁碼點擊事件
         pageClick: function pageClick() {
             var data;
             $('.pages-wrap select option').each(function () {
@@ -783,7 +720,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)();
-exports.push([module.i, "\n\n", ""]);
+exports.push([module.i, "", ""]);
 
 /***/ }),
 
@@ -862,7 +799,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\xampp\\htdocs\\laravel\\copywritingManagement\\Front\\resources\\assets\\js\\pages\\Language.vue"
+Component.options.__file = "C:\\Users\\Toby_huang\\projects\\copywritingManagement\\Front\\resources\\assets\\js\\pages\\Language.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Language.vue: functional components are not supported with templates, they should use render functions.")}
 

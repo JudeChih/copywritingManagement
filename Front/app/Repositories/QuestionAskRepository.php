@@ -59,6 +59,14 @@ class QuestionAskRepository {
 	}
 
 	/**
+	 * 抓取是否有符合的資料
+	 * @param  [array] $arraydata [產品資料]
+	 */
+	public function getDataByRequestData($arraydata){
+		return QuestionAsk::where('isflag',1)->where('qc_id',$arraydata['qc_id'])->where('qa_content',$arraydata['qa_content'])->count();
+	}
+
+	/**
 	 * 刪除問題
 	 * @param  [string] $qa_id [問題編號]
 	 */
@@ -66,7 +74,6 @@ class QuestionAskRepository {
 		try {
 			$savedata['last_update_user'] = \App\Services\AuthService::userData()->ud_account;
     		$savedata['isflag'] = 0;
-
     		return QuestionAsk::where('qa_id',$qa_id)->update($savedata);
 		} catch (\Exception $e) {
 			CommonTools::writeErrorLogByException($e);
@@ -82,20 +89,20 @@ class QuestionAskRepository {
 		try {
 			// 檢查必傳欄位
 			if(!CommonTools::checkArrayValue($arraydata,'qa_content') ||
-			   !CommonTools::checkArrayValue($arraydata,'qc_id')){
+			   !CommonTools::checkArrayValue($arraydata,'qc_id') ||
+			   !CommonTools::checkArrayValue($arraydata,'qa_type')){
 				return false;
 			}
 			// 填入必傳欄位
 			$savedata['qc_id'] = $arraydata['qc_id'];
 			$savedata['qa_content'] = $arraydata['qa_content'];
-
+			$savedata['qa_type'] = $arraydata['qa_type'];
 			// 填入基本欄位
 			$savedata['isflag'] = 1;
 			$savedata['create_user'] = \App\Services\AuthService::userData()->ud_account;
 			$savedata['create_date'] = \Carbon\Carbon::now();
 			$savedata['last_update_user'] = \App\Services\AuthService::userData()->ud_account;
 			$savedata['last_update_date'] = \Carbon\Carbon::now();
-
 			// 新增問題
 			return QuestionAsk::insertGetId($savedata);
 		} catch (\Exception $e) {
@@ -114,7 +121,6 @@ class QuestionAskRepository {
 			if(!CommonTools::checkArrayValue($arraydata,'qa_id')){
 				return false;
 			}
-
 			// 檢查非必傳欄位並填入
 			if(CommonTools::checkArrayValue($arraydata,'qa_content')){
 				$savedata['qa_content'] = $arraydata['qa_content'];
@@ -122,11 +128,12 @@ class QuestionAskRepository {
 			if(CommonTools::checkArrayValue($arraydata,'qc_id')){
 				$savedata['qc_id'] = $arraydata['qc_id'];
 			}
-
+			if(CommonTools::checkArrayValue($arraydata,'qa_type')){
+				$savedata['qa_type'] = $arraydata['qa_type'];
+			}
 			// 填入基本欄位
 			$savedata['last_update_user'] = \App\Services\AuthService::userData()->ud_account;
 			$savedata['last_update_date'] = \Carbon\Carbon::now();
-
 			// 更新問題資訊
 			return QuestionAsk::where("qa_id","=",$arraydata['qa_id'])->update($savedata);
 		} catch (\Exception $e) {

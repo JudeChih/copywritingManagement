@@ -22,24 +22,9 @@ Vue.use( VueRouter )
 export default new VueRouter({
     routes: [
         {
-            path: '/bbin-question-list',
-            name: 'bbinquestion',
-            component: Vue.component( 'bbinquestion', require( './pages/BBINQuestion.vue' ) )
-        },
-        {
-            path: '/bbos-question-list',
-            name: 'bbosquestion',
-            component: Vue.component( 'bbosquestion', require( './pages/BBOSQuestion.vue' ) )
-        },
-        {
-            path: '/language-list',
-            name: 'language',
-            component: Vue.component( 'Language', require( './pages/Language.vue' ) )
-        },
-        {
-            path: '/message-list',
-            name: 'message',
-            component: Vue.component( 'Message', require( './pages/Message.vue' ) )
-        },
+            path: '/',
+            name: 'book',
+            component: Vue.component( 'Book', require( './pages/Book.vue' ) )
+        }
     ]
 });

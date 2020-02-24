@@ -4,6 +4,10 @@ try {
     window.$ = window.jQuery = require('jquery');
 
     require('foundation-sites');
+
+    $(function() {
+        $(document).foundation();
+    });
 } catch (e) {}
 
 /**
@@ -32,27 +36,22 @@ if (token) {
 
 import Vue from 'vue';
 import router from './routes.js';
+import Element from 'element-ui';
 import VueClipboard from 'vue-clipboard2'
 import HighlightText from 'vue-highlight-text';
 import highlight from 'vue-highlight-text/public/directive.min';
-
+Vue.config.productionTip = false;
 Vue.directive('highlight', highlight);
-var infiniteScroll =  require('vue-infinite-scroll');
 Vue.component('HighlightText', HighlightText);
+Vue.use(Element);
 Vue.use(VueClipboard);
-Vue.use(infiniteScroll)
-
+var infiniteScroll =  require('vue-infinite-scroll');
+Vue.use(infiniteScroll);
 
 
 new Vue({
-    router
+    router,
 }).$mount('#app');
-
-// import Language from './pages/Language'
-// import Message from './pages/Message'
-// import Question from './pages/Question';
-
-
 
 
 

@@ -17,4 +17,3 @@
     <bbosquestion></bbosquestion>
 </div>
 @endsection
-
